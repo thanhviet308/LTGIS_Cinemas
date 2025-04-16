@@ -1,0 +1,131 @@
+#map-container {
+    position: relative;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+#sidebar {
+    position: absolute;
+    top: 80px;
+    /* Nếu có header, điều chỉnh top cho phù hợp */
+    left: 0;
+    width: 300px;
+    /* Chỉnh kích thước của sidebar */
+    height: calc(100% - 80px);
+    /* Tính chiều cao sidebar sau header */
+    background-color: white;
+    z-index: 1000;
+    padding: 10px;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+#sidebar {
+    background-color: rgba(255, 255, 255, 0.9);
+    /* Nền sidebar trắng mờ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Đổ bóng cho sidebar */
+    padding-top: 20px;
+    /* Thêm padding trên cùng để không bị dính vào nút đóng */
+}
+
+#sidebar-close-btn {
+    font-size: 36px;
+    /* Tăng kích thước chữ của nút "X" */
+    color: white;
+    /* Màu chữ trắng */
+    background-color: red;
+    /* Nền đỏ cho nút */
+    border: none;
+    /* Xóa đường viền */
+    padding: 10px 15px;
+    /* Tăng kích thước padding */
+    cursor: pointer;
+    /* Con trỏ chuột khi hover lên nút */
+    position: absolute;
+    /* Đặt nút ở góc trên bên phải */
+    top: 10px;
+    /* Cách lề trên 10px */
+    right: 10px;
+    /* Cách lề phải 10px */
+    border-radius: 50%;
+    /* Làm tròn góc nút */
+    z-index: 1100;
+    /* Đảm bảo nút nằm trên các phần tử khác */
+}
+
+#sidebar-close-btn:hover {
+    background-color: darkred;
+    /* Thay đổi màu nền khi hover */
+    color: white;
+    /* Màu chữ vẫn giữ trắng khi hover */
+}
+
+#sidebar-content {
+    padding: 20px;
+    font-size: 1em;
+    color: #333;
+    /* Màu chữ */
+    line-height: 1.6;
+    /* Khoảng cách dòng cho dễ đọc */
+    overflow-y: auto;
+}
+
+/* Căn chỉnh các phần tử trong sidebar */
+#sidebar-content b {
+    font-size: 1.2em;
+    /* Làm chữ in đậm rõ ràng hơn */
+}
+
+#sidebar-content em {
+    font-style: italic;
+    /* In nghiêng cho các đoạn mô tả */
+}
+
+/* Căn chỉnh nút "Chỉ đường" */
+#sidebar-content button {
+    background-color: #007bff;
+    /* Màu nền của nút */
+    color: white;
+    /* Màu chữ của nút */
+    padding: 10px 15px;
+    /* Padding của nút */
+    border: none;
+    /* Xóa đường viền */
+    border-radius: 5px;
+    /* Bo tròn góc của nút */
+    cursor: pointer;
+    /* Con trỏ chuột khi hover */
+    margin-top: 15px;
+    /* Cách nút một khoảng từ các phần trên */
+}
+
+#sidebar-content button:hover {
+    background-color: #0056b3;
+    /* Thay đổi màu nền khi hover */
+}
+
+/* Các mục trong dropdown */
+#search-results div {
+    padding: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Màu nền khi hover */
+#search-results div:hover {
+    background-color: #e0e0e0;
+}
+
+/* Màu nền khi mục được chọn */
+#search-results div.selected {
+    background-color: #f0f0f0;
+    color: #000;
+}
