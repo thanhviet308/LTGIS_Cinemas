@@ -200,3 +200,279 @@ input[type="checkbox"]:checked {
   color: red;
   transform: scale(1.1);
 }
+
+/* Nút đẹp hơn */
+.route-button {
+  background-color: #4CAF50;
+  /* Màu nền xanh lá cây */
+  color: white;
+  /* Màu chữ trắng */
+  font-size: 16px;
+  /* Kích thước chữ */
+  padding: 10px 20px;
+  /* Khoảng cách bên trong */
+  border: none;
+  /* Bỏ viền mặc định */
+  border-radius: 5px;
+  /* Bo tròn góc */
+  cursor: pointer;
+  /* Hiển thị con trỏ khi di chuột */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.route-button:hover {
+  background-color: #45a049;
+  /* Màu nền khi hover (khi di chuột lên) */
+  transform: scale(1.05);
+  /* Tăng kích thước khi hover */
+}
+
+.route-button:active {
+  background-color: #388e3c;
+  /* Màu nền khi nhấn nút */
+  transform: scale(0.98);
+  /* Thu nhỏ nút khi nhấn */
+}
+
+.route-button:focus {
+  outline: none;
+  /* Bỏ viền focus mặc định */
+}
+
+/* Nút nhỏ gọn hơn */
+.route-button {
+  background-color: #4CAF50;
+  /* Màu nền xanh lá cây */
+  color: white;
+  /* Màu chữ trắng */
+  font-size: 14px;
+  /* Kích thước chữ nhỏ hơn */
+  padding: 8px 16px;
+  /* Khoảng cách bên trong nhỏ hơn */
+  border: none;
+  /* Bỏ viền mặc định */
+  border-radius: 4px;
+  /* Bo tròn góc ít hơn */
+  cursor: pointer;
+  /* Hiển thị con trỏ khi di chuột */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.route-button:hover {
+  background-color: #45a049;
+  /* Màu nền khi hover (khi di chuột lên) */
+  transform: scale(1.05);
+  /* Tăng kích thước khi hover */
+}
+
+.route-button:active {
+  background-color: #388e3c;
+  /* Màu nền khi nhấn nút */
+  transform: scale(0.98);
+  /* Thu nhỏ nút khi nhấn */
+}
+
+.route-button:focus {
+  outline: none;
+  /* Bỏ viền focus mặc định */
+}
+
+/* Nút siêu nhỏ gọn */
+.route-button {
+  background-color: #4CAF50;
+  /* Màu nền xanh lá cây */
+  color: white;
+  /* Màu chữ trắng */
+  font-size: 12px;
+  /* Kích thước chữ nhỏ hơn nữa */
+  padding: 6px 12px;
+  /* Khoảng cách bên trong nhỏ hơn nữa */
+  border: none;
+  /* Bỏ viền mặc định */
+  border-radius: 3px;
+  /* Bo tròn góc ít hơn */
+  cursor: pointer;
+  /* Hiển thị con trỏ khi di chuột */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+.route-button:hover {
+  background-color: #45a049;
+  /* Màu nền khi hover (khi di chuột lên) */
+  transform: scale(1.05);
+  /* Tăng kích thước khi hover */
+}
+
+.route-button:active {
+  background-color: #388e3c;
+  /* Màu nền khi nhấn nút */
+  transform: scale(0.98);
+  /* Thu nhỏ nút khi nhấn */
+}
+
+.route-button:focus {
+  outline: none;
+  /* Bỏ viền focus mặc định */
+}
+
+/* Container chứa dropdown */
+.dropdown-container {
+  background-color: #f9f9f9;
+  /* Màu nền nhẹ nhàng */
+  padding: 15px;
+  border-radius: 8px;
+  /* Bo góc */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Đổ bóng nhẹ */
+  max-width: 300px;
+  /* Kích thước tối đa của dropdown */
+  margin-bottom: 10px;
+  /* Khoảng cách dưới */
+}
+
+/* Label đẹp hơn */
+.dropdown-label {
+  font-size: 16px;
+  color: #333;
+  /* Màu chữ tối */
+  font-weight: bold;
+}
+
+/* Dropdown select */
+.dropdown-select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* Bo góc */
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dropdown-select:hover,
+.dropdown-select:focus {
+  border-color: #4CAF50;
+  /* Đổi màu viền khi hover hoặc focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  /* Hiệu ứng bóng khi hover hoặc focus */
+}
+
+/* Movie detail */
+.movie-detail {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+  /* Màu chữ nhẹ */
+  font-style: italic;
+  /* Làm nổi bật */
+}
+
+/* Container chứa dropdown */
+.dropdown-container {
+  background-color: #f9f9f9;
+  /* Màu nền nhẹ nhàng */
+  padding: 10px;
+  border-radius: 8px;
+  /* Bo góc */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Đổ bóng nhẹ */
+  max-width: 300px;
+  /* Kích thước tối đa của dropdown */
+  margin-bottom: 10px;
+  /* Khoảng cách dưới */
+}
+
+/* Label đẹp hơn */
+.dropdown-label {
+  font-size: 16px;
+  color: #333;
+  /* Màu chữ tối */
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+  /* Để label xuống dòng */
+}
+
+/* Dropdown select */
+.dropdown-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* Bo góc */
+  background-color: #fff;
+  color: #555;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none;
+  /* Xóa kiểu mặc định của dropdown */
+  -webkit-appearance: none;
+  /* Hỗ trợ trên Safari */
+  -moz-appearance: none;
+  /* Hỗ trợ trên Firefox */
+}
+
+/* Tạo hình tam giác cho dropdown */
+.dropdown-select::-ms-expand {
+  display: none;
+}
+
+.dropdown-select:focus {
+  border-color: #4CAF50;
+  /* Đổi màu viền khi focus */
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  /* Hiệu ứng bóng khi focus */
+}
+
+/* Tạo hiệu ứng hover cho dropdown */
+.dropdown-select:hover {
+  border-color: #4CAF50;
+  /* Đổi màu viền khi hover */
+  cursor: pointer;
+}
+
+/* Tùy chỉnh Option trong dropdown */
+.dropdown-select option {
+  padding: 10px;
+  /* Tăng khoảng cách giữa các option */
+  background-color: #fff;
+}
+
+/* Option khi hover */
+.dropdown-select option:hover {
+  background-color: #f0f0f0;
+  /* Đổi màu nền option khi hover */
+  color: #333;
+  /* Đổi màu chữ khi hover */
+}
+
+/* Tùy chỉnh Option mặc định -- Chọn phim -- */
+.dropdown-select option:first-child {
+  font-style: italic;
+  /* Màu chữ nghiêng */
+  color: #777;
+  /* Màu chữ xám nhạt */
+  font-weight: bold;
+  /* Làm chữ đậm */
+  background-color: #f0f0f0;
+  /* Màu nền sáng */
+}
+
+/* Tạo hiệu ứng hover cho option */
+.dropdown-select option:hover {
+  background-color: #e0e0e0;
+  /* Đổi màu nền khi hover */
+  color: #333;
+  /* Đổi màu chữ khi hover */
+}
+
+.leaflet-control-fullscreen-button {
+  background-image: url("https://unpkg.com/leaflet.fullscreen@1.6.0/dist/icon-fullscreen.png");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}

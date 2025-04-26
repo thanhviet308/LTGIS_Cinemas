@@ -15,39 +15,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.6.0/Control.FullScreen.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.6.0/Control.FullScreen.min.js"></script>
 {% endblock %}
-<style>
-  #sidebar-close-btn {
-    font-size: 36px;
-    /* Tăng kích thước chữ của nút "X" */
-    color: white;
-    /* Màu chữ trắng */
-    background-color: red;
-    /* Nền đỏ cho nút */
-    border: none;
-    /* Xóa đường viền */
-    padding: 10px 15px;
-    /* Tăng kích thước padding */
-    cursor: pointer;
-    /* Con trỏ chuột khi hover lên nút */
-    position: absolute;
-    /* Đặt nút ở góc trên bên phải */
-    top: 10px;
-    /* Cách lề trên 10px */
-    right: 10px;
-    /* Cách lề phải 10px */
-    border-radius: 50%;
-    /* Làm tròn góc nút */
-    z-index: 1100;
-    /* Đảm bảo nút nằm trên các phần tử khác */
-  }
-  
-  #sidebar-close-btn:hover {
-    background-color: darkred;
-    /* Thay đổi màu nền khi hover */
-    color: white;
-    /* Màu chữ vẫn giữ trắng khi hover */
-  }
-</style>
+
 {% block content %}
   <div id="map" style="height: 650px; width: 100%; position: relative;">
     <!-- Tìm kiếm nổi trên bản đồ -->
@@ -63,7 +31,7 @@
     background: rgba(255, 255, 255, 0.7); /* Giúp thanh tìm kiếm nổi lên trên */
     border-radius: 5px;
   ">
-      <input type="text" autocomplete="off" id="cinema-search" placeholder="🔍 Tìm kiếm rạp chiếu phim" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" />
+      <input type="text" autocomplete="off" id="cinema-search" placeholder="🔍 Tìm kiếm rạp chiếu phim và tên phim" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);" />
       <div id="search-results" class="autocomplete-results" style="
         position: absolute;
         top: 100%;

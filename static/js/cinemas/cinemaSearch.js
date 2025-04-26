@@ -2,34 +2,46 @@ import { map } from './mapCore.js';
 import { zoom } from './mapConfig.js';
 
 let cinemaLookup = {};
+let currentUserLocation = null;
+let distanceCache = {}; // Thêm cache để lưu kết quả đã tính
 
 export function setCinemaLookup(data) {
     cinemaLookup = data;
 }
 
-function getMarkerByFeatureId(featureId) {
-    let found = null;
-    map.eachLayer(layer => {
-        if (layer instanceof L.Marker && layer.feature && layer.feature.id === featureId) {
-            found = layer;
-        }
-    });
-    return found;
+export function setCurrentUserLocation(latlng) {
+    currentUserLocation = latlng;
+    distanceCache = {}; // Reset cache khi vị trí người dùng thay đổi
 }
 
-// 🧠 Retry logic để đợi marker được render xong rồi mới fire click
-function waitAndFireMarker(featureId, retries = 10, delay = 150) {
-    const tryFindingMarker = (attempt = 0) => {
-        const marker = getMarkerByFeatureId(featureId);
-        if (marker) {
-            marker.fire("click");
-        } else if (attempt < retries) {
-            setTimeout(() => tryFindingMarker(attempt + 1), delay);
+// ⭐ Tối ưu hàm này để tính khoảng cách nhanh hơn
+function getRouteDistance(start, end, callback) {
+    // Kiểm tra cache trước
+    const cacheKey = `${start.lat},${start.lng}-${end.lat},${end.lng}`;
+    if (distanceCache[cacheKey]) {
+        callback(distanceCache[cacheKey]);
+        return;
+    }
+
+    const router = L.Routing.osrmv1({
+        serviceUrl: 'https://router.project-osrm.org/route/v1',
+        timeout: 5000 // Thêm timeout để tránh request treo
+    });
+
+    router.route([
+        L.Routing.waypoint(L.latLng(start.lat, start.lng)),
+        L.Routing.waypoint(L.latLng(end.lat, end.lng))
+    ], (err, routes) => {
+        if (!err && routes && routes.length > 0) {
+            const distanceMeters = routes[0].summary.totalDistance;
+            // Lưu vào cache
+            distanceCache[cacheKey] = distanceMeters;
+            callback(distanceMeters);
         } else {
-            console.warn(`Không tìm thấy marker sau ${retries} lần thử`, featureId);
+            console.error('Routing error:', err);
+            callback(null);
         }
-    };
-    tryFindingMarker();
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -38,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!input) return;
 
-    // 🌟 CSS nội dòng
     const style = document.createElement("style");
     style.textContent = `
         #search-results {
@@ -64,42 +75,146 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(style);
 
+    let lastMovieSearchIds = new Set();
+    let pendingRequests = 0;
+    const MAX_CONCURRENT_REQUESTS = 3;
+    let requestQueue = [];
+    let results = []; // Mảng lưu các kết quả tìm kiếm
+
+    function processQueue() {
+        if (requestQueue.length === 0 || pendingRequests >= MAX_CONCURRENT_REQUESTS) return;
+
+        while (pendingRequests < MAX_CONCURRENT_REQUESTS && requestQueue.length > 0) {
+            const req = requestQueue.shift();
+            pendingRequests++;
+
+            getRouteDistance(req.userLocation, req.cinemaLocation, (distanceMeters) => {
+                pendingRequests--;
+
+                if (distanceMeters !== null) {
+                    const distanceKm = (distanceMeters / 1000).toFixed(2);
+                    req.distance = distanceKm; // Thêm khoảng cách vào mỗi request
+                    req.element.textContent = `${req.movie} (${req.cinema}) - ${distanceKm} km`;
+                } else {
+                    req.element.textContent = `${req.movie} (${req.cinema}) - Không tính được khoảng cách`;
+                }
+
+                // Thêm kết quả vào mảng sau khi tính xong khoảng cách
+                results.push({ div: req.element, movie: req.movie, cinemaName: req.cinema, distance: req.distance });
+
+                processQueue(); // Xử lý request tiếp theo trong hàng đợi
+
+                // Nếu tất cả các request đã được xử lý, sắp xếp và hiển thị kết quả
+                if (requestQueue.length === 0 && pendingRequests === 0) {
+                    // Sắp xếp kết quả theo khoảng cách
+                    results.sort((a, b) => (parseFloat(a.distance) || 0) - (parseFloat(b.distance) || 0));
+
+                    // Cập nhật lại kết quả tìm kiếm
+                    resultBox.innerHTML = "";
+                    results.forEach(result => resultBox.appendChild(result.div));
+                }
+            });
+        }
+    }
+
     input.addEventListener("input", () => {
         const query = input.value.trim().toLowerCase();
         resultBox.innerHTML = "";
+        lastMovieSearchIds.clear();
+        requestQueue = [];
+        results = []; // Reset lại kết quả khi bắt đầu tìm kiếm mới
 
-        if (query === "") return;
+        if (query === "") {
+            return;
+        }
 
-        const matches = Object.keys(cinemaLookup).filter(name =>
-            name.toLowerCase().includes(query)
-        );
+        const unique = new Set();
 
-        matches.forEach(name => {
-            const div = document.createElement("div");
-            div.textContent = name;
+        Object.keys(cinemaLookup).forEach(cinemaName => {
+            const { feature, latlng } = cinemaLookup[cinemaName];
 
-            div.addEventListener("click", () => {
-                const { latlng, feature } = cinemaLookup[name];
+            if (!feature) return;
 
-                // 🔍 Zoom tới vị trí
-                map.setView(latlng, zoom);
+            if (cinemaName.toLowerCase().includes(query)) {
+                const key = 'cinema-' + cinemaName;
+                if (!unique.has(key)) {
+                    unique.add(key);
 
-                // ✅ Cập nhật input và ẩn dropdown
-                input.value = name;
-                resultBox.innerHTML = "";
+                    const div = document.createElement("div");
+                    div.textContent = cinemaName;
 
-                // 🔄 Gọi marker click sau khi marker được render lại (nếu cần)
-                waitAndFireMarker(feature.id);
-            });
+                    div.addEventListener("click", () => {
+                        input.value = cinemaName;
+                        resultBox.innerHTML = "";
+                        map.setView(latlng, zoom);
+                        waitAndFireMarker(feature.id);
+                    });
 
-            resultBox.appendChild(div);
+                    resultBox.appendChild(div);
+                }
+            }
+
+            if (feature.properties && feature.properties.movies) {
+                feature.properties.movies.forEach(movie => {
+                    if (movie.toLowerCase().includes(query)) {
+                        const key = 'movie-' + movie + '-' + cinemaName;
+                        if (unique.has(key)) return;
+                        unique.add(key);
+
+                        const div = document.createElement("div");
+                        div.textContent = `${movie} (${cinemaName}) - Đang tính khoảng cách...`;
+
+                        div.addEventListener("click", () => {
+                            input.value = `${movie} (${cinemaName})`;
+                            resultBox.innerHTML = "";
+                            map.setView(latlng, zoom);
+                            waitAndFireMarker(feature.id);
+                        });
+
+                        resultBox.appendChild(div);
+
+                        if (currentUserLocation && latlng) {
+                            requestQueue.push({
+                                userLocation: currentUserLocation,
+                                cinemaLocation: latlng,
+                                element: div,
+                                movie: movie,
+                                cinema: cinemaName
+                            });
+                        } else {
+                            div.textContent = `${movie} (${cinemaName}) - Không xác định vị trí`;
+                        }
+                    }
+                });
+            }
         });
+
+        // Bắt đầu xử lý hàng đợi
+        processQueue();
     });
 
-    // 👇 Click ngoài thì ẩn dropdown
     document.addEventListener("click", (e) => {
         if (!resultBox.contains(e.target) && e.target !== input) {
             resultBox.innerHTML = "";
         }
     });
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setCurrentUserLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+                input.dispatchEvent(new Event('input'));
+            },
+            (error) => {
+                console.warn("Không thể lấy vị trí người dùng:", error);
+                alert("Không thể lấy vị trí của bạn. Vui lòng cấp quyền truy cập vị trí.");
+            }
+        );
+    } else {
+        console.warn("Trình duyệt không hỗ trợ geolocation.");
+        alert("Trình duyệt không hỗ trợ xác định vị trí.");
+    }
 });

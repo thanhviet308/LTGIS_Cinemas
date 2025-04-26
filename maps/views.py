@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import RapChieuPhim
 from django.http import JsonResponse
+from django.conf import settings
+from django.http import JsonResponse
 
 # Create your views here.
 def simplemap(request):
@@ -9,14 +11,6 @@ def search(request):
     return render(request, 'search-address.html')
 def cinema(request):
     return render(request, 'index.html')
-from django.conf import settings
-from django.http import JsonResponse
-
-from django.conf import settings
-from django.http import JsonResponse
-
-from django.http import JsonResponse
-from django.conf import settings
 
 def cinema_geojson(request):
     features = []
@@ -36,15 +30,19 @@ def cinema_geojson(request):
 
         # Chuẩn bị danh sách phim với giờ chiếu
         lich_chieu = []
+        danh_sach_ten_phim = set()  # 🛑 Tạo set để gom các tên phim
+
         for gio in gio_chieu_list:
-            # Xử lý ảnh phim
             anh_phim_url = None
-            if gio.phim.anh_phim:  # Đảm bảo trường 'anh_phim' có tồn tại trong model Phim
+            if gio.phim.anh_phim:
                 relative_path_phim = str(gio.phim.anh_phim)
                 media_url = settings.MEDIA_URL
                 if not media_url.endswith('/'):
                     media_url += '/'
                 anh_phim_url = request.build_absolute_uri(media_url + relative_path_phim)
+
+            # 🛑 Thêm tên phim vào set
+            danh_sach_ten_phim.add(gio.phim.ten_phim)
 
             lich_chieu.append({
                 "ten_phim": gio.phim.ten_phim,
@@ -52,10 +50,12 @@ def cinema_geojson(request):
                 "thoi_luong": gio.phim.thoi_luong,
                 "gio_chieu": gio.thoi_gian.strftime("%H:%M %d-%m-%Y"),
                 "mo_ta_phim": gio.phim.mo_ta_phim,
-                "anh_phim": anh_phim_url  # Thêm ảnh phim vào
+                "anh_phim": anh_phim_url
             })
 
-        # Tạo feature GeoJSON
+        # 🛑 Convert set thành list
+        danh_sach_ten_phim = list(danh_sach_ten_phim)
+
         features.append({
             "type": "Feature",
             "properties": {
@@ -63,7 +63,8 @@ def cinema_geojson(request):
                 "address": rap.dia_chi,
                 "description": rap.mo_ta,
                 "image": anh_rap_url,
-                "lich_chieu": lich_chieu
+                "lich_chieu": lich_chieu,
+                "movies": danh_sach_ten_phim  # 🛑 Thêm danh sách tên phim vào đây
             },
             "geometry": {
                 "type": "Point",
@@ -77,3 +78,4 @@ def cinema_geojson(request):
     }
 
     return JsonResponse(data)
+

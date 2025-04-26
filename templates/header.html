@@ -6,8 +6,8 @@
         <a href="index.html"><img src="{% static 'img/logo/logo.png' %}" alt="logo" /></a>
       </div>
       <ul class="main-menu d-flex align-items-center">
-        <li>
-          <a class="active" href="javascript:void(0)">Home</a>
+        <li class="menu-item">
+          <a class="menu-parent {% if request.path == '/' or request.path == '/about' or 'post' in request.path %}active{% endif %}" href="javascript:void(0)">Home</a>
           <ul class="sub-menu">
             <li>
               <a href="/">🏠</a>
@@ -18,13 +18,10 @@
             <li>
               <a href="{% url 'post:post_list' %}">📋</a>
             </li>
-            <li>
-              <a href="home-4.html">Home Style 4</a>
-            </li>
           </ul>
         </li>
-        <li>
-          <a href="javascript:void(0)">Bản đồ</a>
+        <li class="menu-item">
+          <a class="menu-parent {% if 'maps' in request.path %}active{% endif %}" href="javascript:void(0)">Bản đồ</a>
           <ul class="sub-menu">
             <li>
               <a href="{% url 'maps:co-ban' %}">Cơ bản</a>
@@ -36,42 +33,6 @@
               <a href="{% url 'maps:cinema' %}">Cinema</a>
             </li>
           </ul>
-        </li>
-        <li>
-          <a href="javascript:void(0)">About Us</a>
-          <ul class="sub-menu">
-            <li>
-              <a href="about-us.html">About Us</a>
-            </li>
-            <li>
-              <a href="team.html">Team Members</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="javascript:void(0)">Portfolio</a>
-          <ul class="sub-menu">
-            <li>
-              <a href="project.html">Project</a>
-            </li>
-            <li>
-              <a href="project-details.html">Project Detail</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="javascript:void(0)">Blog</a>
-          <ul class="sub-menu">
-            <li>
-              <a href="blog.html">Blog</a>
-            </li>
-            <li>
-              <a href="blog-details.html">Blog Details</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="contact.html">Contact Us</a>
         </li>
       </ul>
       <div class="right-content ml-auto">

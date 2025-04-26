@@ -9,5 +9,4 @@ urlpatterns = [
     path('tim-kiem/', views.search, name="tim-kiem"),
     path('cinema/', views.cinema, name="cinema"),
     path('api/geojson/cinema/', views.cinema_geojson, name='rap_data'),
-
 ]

@@ -22,7 +22,7 @@ function getCurrentLocation() {
                 _userLocationMarker = L.marker([userLat, userLng], {
                     icon: L.divIcon({
                         className: 'user-location',
-                        html: "<span class='emoji'>📍</span>",
+                        html: "<span class='emoji'>🚩</span>",
                         iconSize: [40, 40],
                         iconAnchor: [20, 20],
                         popupAnchor: [0, -25],
@@ -30,7 +30,7 @@ function getCurrentLocation() {
                 }).addTo(map).bindPopup('Vị trí của bạn').openPopup();
 
                 _userLocationCircle = L.circle([userLat, userLng], {
-                    radius: accuracy,
+                    radius: 30,
                     color: '#4285F4',
                     fillColor: '#4285F4',
                     fillOpacity: 0.15
@@ -64,7 +64,7 @@ export function initializeLocationButton() {
     const locationButton = L.control({ position: 'topleft' });
     locationButton.onAdd = function () {
         const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-        div.innerHTML = '<a href="#" title="Hiển thị vị trí của tôi" style="font-size: 18px;">📍</a>';
+        div.innerHTML = '<a href="#" title="Hiển thị vị trí của tôi" style="font-size: 18px;">🚩</a>';
         div.style.background = 'white';
         div.style.cursor = 'pointer';
 
