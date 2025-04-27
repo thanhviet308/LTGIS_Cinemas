@@ -44,6 +44,11 @@ function getRouteDistance(start, end, callback) {
     });
 }
 
+// ⭐ Thêm hàm kiểm tra trùng lặp kết quả
+function isDuplicateResult(results, movie, cinemaName) {
+    return results.some(result => result.movie === movie && result.cinemaName === cinemaName);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("cinema-search");
     const resultBox = document.getElementById("search-results");
@@ -51,28 +56,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!input) return;
 
     const style = document.createElement("style");
-    style.textContent = `
-        #search-results {
-            border: 1px solid #ccc;
-            max-height: 200px;
-            overflow-y: auto;
-            position: absolute;
-            background-color: white;
-            z-index: 1000;
-            width: 100%;
-        }
+    style.textContent = `#search-results {
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        position: absolute;
+        background-color: white;
+        z-index: 1000;
+        width: 100%;
+    }
 
-        #search-results div {
-            padding: 8px 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
-        }
+    #search-results div {
+        padding: 8px 12px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s;
+    }
 
-        #search-results div:hover {
-            background-color: #f0f0f0;
-        }
-    `;
+    #search-results div:hover {
+        background-color: #f0f0f0;
+    }`;
     document.head.appendChild(style);
 
     let lastMovieSearchIds = new Set();
@@ -100,7 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 // Thêm kết quả vào mảng sau khi tính xong khoảng cách
-                results.push({ div: req.element, movie: req.movie, cinemaName: req.cinema, distance: req.distance });
+                // Tránh trùng lặp
+                if (!isDuplicateResult(results, req.movie, req.cinema)) {
+                    results.push({ div: req.element, movie: req.movie, cinemaName: req.cinema, distance: req.distance });
+                }
 
                 processQueue(); // Xử lý request tiếp theo trong hàng đợi
 
